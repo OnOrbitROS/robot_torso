@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+
+        <!-- overwriting these args -->
+        <arg name="debug" default="false" />
+        <arg name="gui" default="true" />
+        <arg name="pause" default="false" />
+        <arg name="world" default="$(find talos_gazebo)/worlds/empty.world" />
+
+        <!-- include gazebo_ros launcher -->
+        <include file="$(find gazebo_ros)/launch/empty_world.launch">
+                <arg name="world_name" value="$(arg world)" />
+                <arg name="verbose" value="true" />
+                <arg name="debug" value="$(arg debug)" />
+                <arg name="gui" value="$(arg gui)" />
+                <arg name="paused" value="$(arg pause)" />
+                <arg name="use_sim_time" value="true" />
+        </include>
+
+        <!-- <arg name="robot"  default="talos"/> -->
+        <arg name="gzpose" default="-x 0.0 -y 0.0 -z 0.0 -R 0.0 -P 0.0 -Y 0.0"/> 
+
+        
+        <!-- Load the URDF into the ROS Parameter Server -->
+        <param
+            name="robot_description"
+            command=" $(find xacro)/xacro 
+                '$(find talos_description)/urdf/talos.xacro'"
+        />
+
+        <rosparam command="load" file="$(find talos_description)/config/pids_gripper.yaml"/>
+        <rosparam command="load" file="$(find talos_description)/config/default_configuration_talos.yaml"/>
+        <rosparam command="load" file="$(find pinza_control)/config/pinza_control.yaml"/>
+        
+        
+
+
+        <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
+        args="-urdf -model talos -param robot_description  $(arg gzpose)"/>
+
+        <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+                output="screen" ns="/talos" args="joint_state_controller"/> -->
+      <!--   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+                output="screen" ns="/talos" args="joint_state_controller
+                                                joint1_effort_controller
+                                                joint2_effort_controller
+                                                joint3_effort_controller
+                                                joint4_effort_controller
+                                                joint5_effort_controller
+                                                joint6_effort_controller
+                                                joint7_effort_controller"/> -->
+
+        <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+                output="screen" ns="/talos" args="joint_state_controller
+                                                joint1_effort_controller"/>
+        
+        <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen" >
+                <remap from="/joint_states" to="/talos/joint_states" /> -->
+
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen" />
+              
+        <!-- ros_control rrbot launch file -->
+        <!--include file="$(find rrbot_control)/launch/rrbot_control.launch" /-->
+
+</launch>
