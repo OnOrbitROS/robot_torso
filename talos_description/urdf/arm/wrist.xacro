@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!--Constant parameters-->
+  <xacro:property name="wrist_friction"       value="1.0" />
+  <xacro:property name="wrist_damping"        value="1.0" />
+  <xacro:property name="wrist_1_max_vel"      value="1.95" />
+  <xacro:property name="wrist_2_max_vel"      value="1.76" />
+  <xacro:property name="wrist_3_max_vel"      value="1.76" />
+  <xacro:property name="wrist_1_max_effort"   value="20.0" />
+  <xacro:property name="wrist_2_max_effort"   value="8.0" />
+  <xacro:property name="wrist_3_max_effort"   value="8.0" />
+  <xacro:property name="wrist_eps"          value="0.02" />
+
+
+  <xacro:macro name="talos_wrist_simple_transmission" params="name side number reduction offset_value" >
+    <transmission name="${name}_${side}_${number}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="${name}_${side}_${number}_motor" >
+        <mechanicalReduction>${reduction}</mechanicalReduction>
+      </actuator>
+      <joint name="${name}_${side}_${number}_joint">
+        <offset>${offset_value}</offset>
+        <!-- <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+  </xacro:macro>
+
+  <xacro:macro name="talos_wrist_differential_transmission"
+               params="name side number_1 number_2 act_reduction_1 act_reduction_2 jnt_reduction_1 jnt_reduction_2 offset_value_1 offset_value_2" >
+    
+    <transmission name="wrist_${side}_${number_1}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_${side}_${number_1}_joint">
+        <mechanicalReduction>${jnt_reduction_1}</mechanicalReduction>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${name}_${side}_${number_1}_motor">
+        <mechanicalReduction>${act_reduction_1}</mechanicalReduction>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </actuator> 
+    </transmission>
+
+    <transmission name="wrist_${side}_${number_2}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_${side}_${number_2}_joint">
+        <mechanicalReduction>${jnt_reduction_2}</mechanicalReduction>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${name}_${side}_${number_2}_motor">
+        <mechanicalReduction>${act_reduction_2}</mechanicalReduction>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </actuator> 
+    </transmission>
+  </xacro:macro>
+
+
+  <xacro:macro name="talos_wrist" params="name parent side reflect">
+
+    <!--************************-->
+    <!--        WRIST           -->
+    <!--************************-->
+    <link name="${name}_${side}_5_link">
+      
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_5.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+        <material name="LightGrey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_5_collision.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="1.877923"/>
+        <inertia ixx="0.00349507283" ixy="1.265489e-05" ixz="1.038286e-05" iyy="0.00436830072" iyz="-9.736042e-05" izz="0.0022826337" />
+        <origin rpy="0 0 0" xyz="-6e-05 0.003262 0.079625"/>
+      </inertial>
+
+    </link>
+
+    <joint name="${name}_${side}_5_joint" type="revolute">
+      <parent link="${parent}" />
+      <child link="${name}_${side}_5_link" />
+      <origin xyz="-0.02000 0.00000 -0.26430"
+                rpy="${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad}"/>
+      <axis xyz="0 0 1" />
+      <limit lower="${-144.0 * deg_to_rad}" upper="${144.0 * deg_to_rad}" effort="${wrist_1_max_effort}" velocity="${wrist_1_max_vel}" />
+      <dynamics friction="${wrist_friction}" damping="${wrist_damping}"/>
+    </joint>
+
+    <link name="${name}_${side}_6_link">
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_6.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+        <material name="LightGrey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_6_collision.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="0.40931"/>
+        <inertia ixx="0.00010700023" ixy="-8.899e-08" ixz="-4.392e-08" iyy="0.00014101316" iyz="4.1702e-07" izz="0.00015398658" />
+        <origin rpy="0 0 0" xyz="2.1e-05 -0.001965 -0.000591"/>
+      </inertial>
+
+    </link>
+
+    <joint name="${name}_${side}_6_joint" type="revolute">
+      <parent link="${name}_${side}_5_link" />
+      <child link="${name}_${side}_6_link" />
+      <origin xyz="0.00000 0.00000 0.00000"
+              rpy="${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad}"/>
+      <axis xyz="1 0 0" />
+      <limit lower="${-78.5 * deg_to_rad}" upper="${78.5 * deg_to_rad}" effort="${wrist_2_max_effort}" velocity="${wrist_2_max_vel}" />
+      <dynamics friction="${wrist_friction}" damping="${wrist_damping}"/>
+
+    </joint>
+
+    <link name="${name}_${side}_7_link">
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_7.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+        <material name="DarkGrey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_7_collision.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+      </collision>
+    
+      <inertial>
+        <mass value="0.308441"/>
+        <inertia ixx="0.00030894317" ixy="-1.58687e-06" ixz="1.73418e-06" iyy="0.00021886181" iyz="-1.221167e-05" izz="0.00017519492" />
+        <origin rpy="0 0 0" xyz="0.007525 0.001378 -0.02463"/>
+      </inertial>
+
+    </link>
+
+    <joint name="${name}_${side}_7_joint" type="revolute">
+      <parent link="${name}_${side}_6_link" />
+      <child link="${name}_${side}_7_link" />
+      <origin xyz="0.0 0.0 0.0"
+                rpy="${0.0 * deg_to_rad} ${0.0 * deg_to_rad} ${0.0 * deg_to_rad}"/>
+      <axis xyz="0 1 0" />
+      <limit lower="${-39.0 * deg_to_rad}" upper="${39.0 * deg_to_rad}" effort="${wrist_3_max_effort}" velocity="${wrist_3_max_vel}"/>
+      <dynamics friction="${wrist_friction}" damping="${wrist_damping}"/>
+    </joint>
+
+
+    <xacro:talos_wrist_simple_transmission name="${name}" side="${side}" number="5" reduction="1.0"
+                                         offset_value="0.0"/>
+
+    <xacro:talos_wrist_differential_transmission name="${name}" side="${side}" number_1="6" number_2="7"
+                                                  act_reduction_1="-1.0" act_reduction_2="1.0"
+                                                  jnt_reduction_1="-1.0" jnt_reduction_2="-1.0"
+                                                  offset_value_1="0.0"
+                                                  offset_value_2="0.0"/>
+                                                  
+
+  </xacro:macro>
+
+  
+</robot>

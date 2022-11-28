@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+
+  <xacro:macro name="ft_sensor" params="name parent side reflect">
+    <!--************************-->
+    <!--        ft sensor       -->
+    <!--************************-->
+    <link name="${name}_${side}_ft_link">
+      
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="${0.045*0.5}" length="0.0157"/>
+        </geometry>
+        <material name="LightGrey" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="${0.045*0.5}" length="0.0157"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="0.095"/>
+        <inertia ixx="1.108502e-05" ixy="9.9077e-07" ixz="-2.3811e-07" iyy="1.092725e-05" iyz="2.3137e-07" izz="1.898772e-05" />
+        <origin rpy="0 0 0" xyz="-0.001001 0.000995 -0.008108"/>
+      </inertial>
+
+    </link>
+
+    <joint name="${name}_${side}_ft_joint" type="fixed">
+      <parent link="${parent}" />
+      <child link="${name}_${side}_ft_link" />
+      <origin xyz="0 0 -0.051" rpy="${0.0 * deg_to_rad} 0 ${(-180.0 + 90.0*reflect)* deg_to_rad}" />
+    </joint>
+
+    <!--***********************-->
+    <!--       FT TOOL         -->
+    <!--***********************-->
+    <link name="${name}_${side}_ft_tool_link">
+      <visual>
+        <origin xyz="0.0 0 0" rpy="0 ${0.0 * deg_to_rad} 0" />
+        <geometry>
+          <cylinder radius="${0.05*0.5}" length="0.00975"/>
+        </geometry>
+        <material name="FlatBlack" />
+      </visual>
+      <collision>
+        <origin xyz="0.0 0 0" rpy="0 ${0.0 * deg_to_rad} 0" />
+        <geometry>
+          <cylinder radius="${0.05*0.5}" length="0.00975"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="0.001"/>
+        <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+      </inertial>
+
+    </link>
+
+    <joint name="${name}_${side}_tool_joint" type="fixed">
+      <parent link="${name}_${side}_ft_link" />
+      <child link="${name}_${side}_ft_tool_link" />
+      <origin xyz="0 0 ${-1.0 * (0.0157*0.5 + 0.00975*0.5)}" rpy="0 0 ${(90.0 -180.0* reflect) * deg_to_rad}" />
+
+    </joint>
+
+</xacro:macro>
+
+</robot>

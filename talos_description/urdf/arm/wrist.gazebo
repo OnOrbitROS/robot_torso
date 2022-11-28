@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+
+  <xacro:macro name="talos_wrist_gazebo" params="name parent side reflect">
+   
+    <gazebo reference="${name}_${side}_5_link">
+      <mu1>0.9</mu1>
+      <mu2>0.9</mu2>
+    </gazebo>
+    <gazebo reference="${name}_${side}_6_link">
+      <mu1>0.9</mu1>
+      <mu2>0.9</mu2>
+    </gazebo>
+    <gazebo reference="${name}_${side}_7_link">
+      <mu1>0.9</mu1>
+      <mu2>0.9</mu2>
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+
+    <gazebo reference="${name}_${side}_5_joint">
+        <implicitSpringDamper>1</implicitSpringDamper>
+    </gazebo>
+    <gazebo reference="${name}_${side}_6_joint">
+        <implicitSpringDamper>1</implicitSpringDamper>
+    </gazebo>
+    <gazebo reference="${name}_${side}_7_joint">
+        <implicitSpringDamper>1</implicitSpringDamper>
+        <provideFeedback>1</provideFeedback>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

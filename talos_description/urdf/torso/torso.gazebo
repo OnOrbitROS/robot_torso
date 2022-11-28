@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+   <gazebo reference="chest_link">
+        <mu1>0.9</mu1>
+        <mu2>0.9</mu2>
+    </gazebo>
+
+    <gazebo reference="waist_link">
+        <mu1>0.9</mu1>
+        <mu2>0.9</mu2>
+    </gazebo>
+   
+    <gazebo reference="hip_link">
+        <mu1>0.9</mu1>
+        <mu2>0.9</mu2>
+    </gazebo>
+
+    <gazebo reference="hip_waist_joint">
+        <implicitSpringDamper>1</implicitSpringDamper>
+    </gazebo>
+    <gazebo reference="waist_chest_joint">
+        <implicitSpringDamper>1</implicitSpringDamper>
+        <provideFeedback>1</provideFeedback>
+    </gazebo>
+
+</robot>
+

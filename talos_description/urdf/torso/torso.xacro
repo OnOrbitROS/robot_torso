@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find talos_description)/urdf/torso/torso.gazebo" />
+
+    <link name="chest_link">
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/torso/chest.STL" scale="1 1 1"/>
+        </geometry>
+        <material name="LightGrey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/torso/chest_collision.STL" scale="1 1 1"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="16.97403"/>
+        <inertia ixx="0.44372633826" ixy="0.00069132133" ixz="-0.01218206353" iyy="0.2998576068" iyz="-0.00019623338" izz="0.32201554742" />
+        <origin rpy="0 0 0" xyz="-0.0463563 -0.00099023 0.1452805"/>
+      </inertial>
+
+    </link>
+    
+
+    <link name="waist_link">
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/torso/waist.STL" scale="1 1 1"/>
+        </geometry>
+        <material name="LightGrey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/torso/waist.STL" scale="1 1 1"/>
+        </geometry>
+      </collision>
+      
+      <inertial>
+        <mass value="2.294658"/>
+        <inertia ixx="0.00638508087" ixy="-7.107e-08" ixz="-3.065592e-05" iyy="0.00410256102" iyz="-1.46946e-06" izz="0.00622968815" />
+        <origin rpy="0 0 0" xyz="0.00078223 3.528e-05 -0.01782457"/>
+      </inertial>
+
+    </link>
+
+
+    <link name="base_link">
+      
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/torso/base_link.STL" scale="1 1 1"/>
+        </geometry>
+        <material name="LightGrey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/torso/base_link_collision.STL" scale="1 1 1"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="0.637534"/>
+        <inertia ixx="0.0005849692" ixy="4.37159e-06" ixz="-1.2589e-05" iyy="0.00067076439" iyz="2.824361e-05" izz="0.00085526645" />
+        <origin rpy="0 0 0" xyz="2.8e-05 0.005394 -0.023654"/>
+      </inertial>
+
+    </link>
+
+   <!-- <link name="base_link" />
+
+    <joint name="base_to_hip_link" type="fixed">
+      <parent link="base_link"/>
+      <child link="hip_link"/>
+    </joint>  -->
+
+
+    <link name="dummy_base_link" />
+
+    <joint name="dummy_to_base_link" type="fixed">
+      <parent link="dummy_base_link"/>
+      <child link="base_link"/>
+    </joint>
+
+    <joint name="hip_waist_joint" type="revolute">
+      
+      <parent link="base_link"/>
+      <child link="waist_link"/>
+      <origin xyz="0.0 0.0 0.0722" 
+              rpy="${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad}"/>
+      <axis xyz="0 0 1" />
+      <limit lower="${-72.00000 * deg_to_rad}" upper="${72.00000 * deg_to_rad}"
+             effort="${torso_max_effort}" velocity="${torso_max_vel}" />
+      <dynamics damping="1.0" friction="1.0"/>
+
+    </joint>
+
+
+    <joint name="waist_chest_joint" type="revolute">
+     
+      <parent link="waist_link"/>
+      <child link="chest_link"/>
+      <origin xyz="0.0 0.0 0.0" 
+              rpy="${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad}"/>
+      <axis xyz="0 1 0" />
+      <limit lower="${-13.0 * deg_to_rad}" upper="${42.0 * deg_to_rad}"
+             effort="${torso_max_effort}" velocity="${torso_max_vel}"/>
+      <dynamics friction="1.0" damping="1.0"/>
+
+    </joint>
+
+
+    <transmission name="hip_waist_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="hip_waist_joint">
+        <mechanicalReduction>1.0</mechanicalReduction>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+     <actuator name="hip_motor">
+        <mechanicalReduction>1.0</mechanicalReduction>
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+     </actuator>
+    </transmission>
+
+
+    <transmission name="waist_chest_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="waist_chest_joint">
+        <mechanicalReduction>1.0</mechanicalReduction>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="waist_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1.0</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+</robot>
+

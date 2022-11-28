@@ -1,0 +1,12 @@
+# rosparam load orbit_parameters.yaml [namespace] if don't use namespace /param_name
+# Oribit parameters
+eccentricity: 0.00001
+semi_major_axix: 12000
+inclination: (60.0*pi)/180.0
+rate_of_right_ascension: 0.0
+right_ascension_ini: 0.0
+argument_of_perigee_ini: 0.0
+rate_argument_Of_perigee: 0.0
+mean_anomaly_ini: (60.0*pi)/180.0
+time_of_applicability: 0.0
+angular_velocity: 0.0004802828183978146  # sqrt( MUe / pow( SemiMajorAxix , 3));

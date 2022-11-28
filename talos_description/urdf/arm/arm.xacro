@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!--Constant parameters-->
+  <xacro:property name="arm_friction"       value="1.0" />
+  <xacro:property name="arm_damping"        value="1.0" />
+  <xacro:property name="arm_1_max_vel"      value="2.7" />
+  <xacro:property name="arm_2_max_vel"      value="3.66" />
+  <xacro:property name="arm_3_max_vel"      value="4.58" />
+  <xacro:property name="arm_4_max_vel"      value="4.58" />
+  <xacro:property name="arm_1_max_effort"   value="100.0" />
+  <xacro:property name="arm_2_max_effort"   value="100.0" />
+  <xacro:property name="arm_3_max_effort"   value="70.0" />
+  <xacro:property name="arm_4_max_effort"   value="70.0" />
+  <xacro:property name="arm_eps"            value="0.02" />
+
+  <xacro:include filename="$(find talos_description)/urdf/arm/arm.gazebo" />
+
+  <xacro:macro name="talos_arm_simple_transmission" params="name side number reduction offset_value" >
+    <transmission name="${name}_${side}_${number}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="${name}_${side}_${number}_motor" >
+        <mechanicalReduction>${reduction}</mechanicalReduction>
+      </actuator>
+      <joint name="${name}_${side}_${number}_joint">
+        <offset>${offset_value}</offset>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+  </xacro:macro>  
+
+
+  <xacro:macro name="talos_arm" params="name parent side reflect">
+
+  <xacro:talos_arm_gazebo name="${name}"  parent="${parent}" side="${side}" reflect="${reflect}" />
+
+    <!--************************-->
+    <!--        SHOULDER        -->
+    <!--************************-->
+    <link name="${name}_${side}_1_link">
+      
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_1.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+        <material name="DarkGrey" />
+      </visual>
+
+      <collision>
+       <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_1_collision.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="2.714567"/>
+        <inertia ixx="0.01237818683" ixy="-3.625571e-05" ixz="7.14472e-05" iyy="0.004191372" iyz="-0.00023639064" izz="0.01358161109" />
+        <origin rpy="0 0 0" xyz="-0.0002762 0.10060223 0.04437419"/>
+      </inertial>
+
+    </link>
+
+    <joint name="${name}_${side}_1_joint" type="revolute">
+      <parent link="${parent}" />
+      <child link="${name}_${side}_1_link" />
+      <origin xyz="0.00000 ${0.15750*reflect} 0.23200"
+              rpy="${0.0 * deg_to_rad} ${0.0 * deg_to_rad} ${0.0 * deg_to_rad}"/>
+      <axis xyz="0 0 1" />
+      <limit lower="${(-67.5 - 22.5*reflect)* deg_to_rad}" upper="${(67.5 - 22.5*reflect)* deg_to_rad}" effort="${arm_1_max_effort}" velocity="${arm_1_max_vel}" />
+      <dynamics friction="${arm_friction}" damping="${arm_damping}"/>
+
+    </joint>
+
+
+    <link name="${name}_${side}_2_link">
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_2.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+        <material name="DarkGrey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_2_collision.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="2.425086"/>
+        <inertia ixx="0.01297822101" ixy="1.208791e-05" ixz="-0.00320370433" iyy="0.01380870278" iyz="-0.00012770059" izz="0.00478856621" />
+        <origin rpy="0 0 0" xyz="0.01438831 0.00092938 -0.08684268"/>
+      </inertial>
+
+    </link>
+
+    <joint name="${name}_${side}_2_joint" type="revolute">
+      <parent link="${name}_${side}_1_link" />
+      <child link="${name}_${side}_2_link" />
+      <origin xyz="0.00493 ${0.13650*reflect} 0.04673"
+              rpy="${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad}"/>
+      <axis xyz="1 0 0" />
+      <limit lower="${(-82.0000 + 82.5000*reflect)* deg_to_rad}" upper="${(82.50000*reflect + 82.0000)* deg_to_rad}" effort="${arm_2_max_effort}" velocity="${arm_2_max_vel}" />
+      <dynamics friction="${arm_friction}" damping="${arm_damping}"/>
+
+    </joint>
+
+
+    <link name="${name}_${side}_3_link">
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_3.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+        <material name="DarkGrey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_3_collision.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="2.208741"/>
+        <inertia ixx="0.00718831493" ixy="-0.00011563551" ixz="0.00075969733" iyy="0.00693528503" iyz="0.00042134743" izz="0.00388359007" />
+        <origin rpy="0 0 0" xyz="0.0136084 0.01241619 -0.2499004"/>
+      </inertial>
+
+    </link>
+
+    <joint name="${name}_${side}_3_joint" type="revolute">
+
+      <parent link="${name}_${side}_2_link" />
+      <child link="${name}_${side}_3_link" />
+      <origin xyz="0.00000 0.00000 0.00000"
+              rpy="${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad}"/>
+      <axis xyz="0 0 1" />
+      <limit lower="${-139.0 * deg_to_rad}" upper="${139.0 * deg_to_rad}" effort="${arm_3_max_effort}" velocity="${arm_3_max_vel}" />
+      <dynamics friction="${arm_friction}" damping="${arm_damping}"/>
+
+    </joint>
+
+    <!--************************-->
+    <!--        ELBOW           -->
+    <!--************************-->
+    <link name="${name}_${side}_4_link">
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_4.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+        <material name="DarkGrey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://talos_description/meshes/arm/arm_4_collision.STL" scale="1 ${reflect} 1"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="0.877346"/>
+        <inertia ixx="0.00251207716" ixy="0.00010070062" ixz="-0.00032788214" iyy="0.00275869324" iyz="0.00040022227" izz="0.00120735959" />
+        <origin rpy="0 0 0" xyz="-0.00742138 -0.0213895 -0.03312656"/>
+      </inertial>
+
+    </link>
+
+    <joint name="${name}_${side}_4_joint" type="revolute">
+      <parent link="${name}_${side}_3_link" />
+      <child link="${name}_${side}_4_link" />
+      <origin xyz="0.02000 0.00000 -0.27300"
+              rpy="${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad} ${0.00000 * deg_to_rad}"/>
+      <axis xyz="0 1 0" />
+      <limit lower="${-128.0 * deg_to_rad}" upper="${-0.2 * deg_to_rad}" effort="${arm_4_max_effort}" velocity="${arm_4_max_vel}" />
+      <dynamics friction="${arm_friction}" damping="${arm_damping}"/>
+    </joint>
+
+    <xacro:talos_arm_simple_transmission name="${name}" side="${side}" number="1" reduction="1.0" offset_value="0.0" />
+    <xacro:talos_arm_simple_transmission name="${name}" side="${side}" number="2" reduction="1.0" offset_value="0.0" />
+    <xacro:talos_arm_simple_transmission name="${name}" side="${side}" number="3" reduction="1.0" offset_value="0.0" />
+    <xacro:talos_arm_simple_transmission name="${name}" side="${side}" number="4" reduction="1.0" offset_value="0.0" /> 
+
+  </xacro:macro>
+
+</robot>

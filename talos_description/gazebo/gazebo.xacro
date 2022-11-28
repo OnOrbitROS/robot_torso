@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<robot name="talos">
+  <gazebo>
+    <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
+      <robotNamespace>/talos</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType> 
+    </plugin>
+  </gazebo> 
+  
+  <gazebo>
+    <plugin name="Orbit_robot_pkg_plugin" filename="libOrbit_robot_pkg_plugin.so"/>
+  </gazebo>
+
+  <gazebo>
+    <plugin filename="libgazebo_ros_force.so" name="gazebo_ros_force">
+      <bodyName>base_link</bodyName>
+      <topicName>wrench</topicName>
+    </plugin>
+  </gazebo> 
+  
+
+  <gazebo reference="imu_link">
+    <sensor name="imu_sensor" type="imu">
+      <always_on>1</always_on>
+      <update_rate>1000.0</update_rate>
+      <imu>
+        <noise>
+          <type>gaussian</type>    
+          <rate>
+            <mean>0.0</mean>
+            <stddev>0.0</stddev>
+            <bias_mean>0.000000</bias_mean>
+            <bias_stddev>0.0000008</bias_stddev>
+          </rate>
+          <accel>
+            <mean>0.0</mean>
+            <stddev>0.0</stddev>
+            <bias_mean>0.0</bias_mean>
+            <bias_stddev>0.000</bias_stddev>
+          </accel>
+        </noise>
+      </imu>
+    </sensor>
+  </gazebo> 
+
+</robot>
+

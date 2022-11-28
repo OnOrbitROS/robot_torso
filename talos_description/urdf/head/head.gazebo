@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+
+  <gazebo reference="neck_link">
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
+  </gazebo>
+
+  <gazebo reference="updown_head_joint">
+      <implicitSpringDamper>1</implicitSpringDamper>
+  </gazebo>
+
+  <gazebo reference="neck_link">
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+
+  <gazebo reference="cranium_link">
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
+  </gazebo>
+  
+  <gazebo reference="leftright_head_joint">
+      <implicitSpringDamper>1</implicitSpringDamper>
+  </gazebo>
+
+  <gazebo reference="cranium_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+</robot>
