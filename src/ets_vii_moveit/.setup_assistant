@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: ets_vii
+    relative_path: urdf/ets_vii.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/ets_vii.srdf
+  CONFIG:
+    author_name: Jose Luis Ramon
+    author_email: jl.ramon@ua.es
+    generated_timestamp: 1640087361

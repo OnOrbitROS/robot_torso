@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+  <rosparam file="$(find talos_control)/config/cartesian_controller_basic.yaml" command="load"/>
+
+  <node name="talos_control_spawner" pkg="controller_manager" type="spawner" output="screen" ns="/talos" args="right_arm_controller"/>
+
+</launch>

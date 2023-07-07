@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+  <rosparam file="$(find talos_control)/config/aruco_trajectory_cartesian_controller.yaml" command="load"/>
+
+  <node name="talos_control_spawner" pkg="controller_manager" type="spawner" output="screen" ns="/talos" args="right_arm_controller"/>
+
+
+  <include file="$(find talos_control)/launch/head_controller.launch"/>
+
+  <include file="$(find talos_control)/launch/grippers_controllers.launch"/>
+  
+  <include file="$(find aruco_ros)/launch/astro_detector.launch"/>
+  
+  <node name="look_to_aruco_node" pkg="talos_control" type="look_to_aruco" output="screen"/>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find talos_control)/config/rviz/aruco_rviz.rviz" />
+
+
+</launch>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+  <rosparam command="load" file="$(find talos_control)/config/astro_gripper/gripper_left.yaml" />
+  <rosparam command="load" file="$(find talos_control)/config/astro_gripper/gripper_right.yaml" />
+
+  <!-- Controllers that come up started -->
+  <node name="hand_controllers_spawner"
+        pkg="controller_manager" type="spawner" output="screen"
+        args="--timeout 120
+              right_gripper_controller
+              left_gripper_controller" />
+
+  <!-- Servicio para abrir y cerrar las manos -->
+  <node name="hand_service_node" pkg="talos_control" type="gripper_service" output="screen"/>
+
+</launch>

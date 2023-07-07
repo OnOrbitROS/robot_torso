@@ -1,0 +1,61 @@
+<library path="lib/libtalos_control_lib">
+
+  <class name="talos_control/ArucoController" 
+         type="position_controller::ArucoController"           
+         base_class_type="controller_interface::ControllerBase" >
+    <description>
+      The astronaut controller (Cartesian Controller) use a Aruco Marker to get his own position 
+      that way the controller can calculate the error to achieve the desired point 
+    </description>
+  </class>
+
+  <class name="talos_control/ArucoTrajectoryController" 
+         type="position_controller::ArucoTrajectoryController"           
+         base_class_type="controller_interface::ControllerBase" >
+    <description>
+      The astronaut controller (Cartesian Controller) use a Aruco Marker to get his own position, 
+      that way the controller can calculate the error to achieve the desired point. Evry time a new final
+      position arrives a new trajectory path is calcutated and a new time is recalculated in a propotional
+      way to the first time and final position gave.
+    </description>
+  </class>
+
+  <class name="talos_control/GazeboTrajectoryController" 
+         type="position_controller::GazeboTrajectoryController"           
+         base_class_type="controller_interface::ControllerBase" >
+    <description>
+      The astronaut controller (Cartesian Controller) use a Frames composition to get his position
+      with the ISS reference to use this controllers is necessary to know robot and ISS pose with
+      world reference.
+    </description>
+  </class>
+
+  <class name="talos_control/CartesianTrajectoryController" 
+         type="position_controller::CartesianTrajectoryController"           
+         base_class_type="controller_interface::ControllerBase" >
+    <description>
+      The astronaut controller (Cartesian Controller) a target position is especified 
+      with the robot base_link reference. Also a quintuic trajectory is calculated and executed.
+    </description>
+  </class>
+
+  <class name="talos_control/TorsoEffortController" 
+         type="position_controller::TorsoEffortController"           
+         base_class_type="controller_interface::ControllerBase" >
+    <description>
+      The astronaut controller (Cartesian trayectory Controller) which know the effort
+      in the robot's torso to control the robot arm.
+    </description>
+  </class>
+
+  <class name="talos_control/CartesianControllerTorsoEfforts" 
+         type="position_controller::CartesianControllerTorsoEfforts"           
+         base_class_type="controller_interface::ControllerBase" >
+    <description>
+      The astronaut controller (Cartesian trayectory Controller) which know the effort
+      in the robot's torso to control the robot arm. And moves the arm to a desired position
+      sent by Ros topics.
+    </description>
+  </class>
+
+</library>

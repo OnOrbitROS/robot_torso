@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+  <rosparam file="$(find talos_control)/config/cartesian_controller_torso_efforts.yaml" command="load"/>
+
+  <node name="talos_control_spawner" pkg="controller_manager" type="spawner" output="screen" ns="/talos" args="right_arm_controller"/>
+
+  <include file="$(find talos_control)/launch/grippers_controllers.launch"/>
+  
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find talos_control)/config/rviz/aruco_rviz.rviz" />
+
+</launch>

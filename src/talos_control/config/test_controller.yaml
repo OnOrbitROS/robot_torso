@@ -1,0 +1,43 @@
+talos:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50  
+
+  # Position Controllers ---------------------------------------
+  joint1_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: hip_waist_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint2_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: waist_chest_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint3_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: updown_head_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint4_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: leftright_head_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint5_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: arm_left_1_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint6_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: arm_left_2_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint7_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: arm_left_3_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint8_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: arm_left_4_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint9_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: arm_left_5_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
